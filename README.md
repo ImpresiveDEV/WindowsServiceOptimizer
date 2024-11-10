@@ -7,8 +7,3 @@
 
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\privacy.ps1
-
-## Optional if you want backroll:  
-
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File .\privacy_restore.ps1
