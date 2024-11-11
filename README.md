@@ -15,3 +15,5 @@
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\privacy_restore.ps1
    ```
+
+**IF YOU USE THIS - PLEASE LEAVE ME A STAR AND FOLLOW**
