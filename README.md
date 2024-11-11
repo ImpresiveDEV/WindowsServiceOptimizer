@@ -7,10 +7,11 @@
 
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\privacy.ps1 -StopDynamicServices
+   powershell -ExecutionPolicy Bypass -File .\privacy.ps1 -StartDynamicServices
    ```
 
 ## Restore if needed:
 
    ```powershell
-   powershell -ExecutionPolicy Bypass -File "C:\Users\IMPRESIVE\privacy_restore.ps1" -StartDynamicServices
+   powershell -ExecutionPolicy Bypass -File .\privacy_restore.ps1
    ```
