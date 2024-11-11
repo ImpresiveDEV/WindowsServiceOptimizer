@@ -209,25 +209,6 @@ function Start-DynamicServices {
     Write-Host "Dynamic services have been enabled." -ForegroundColor Cyan
 }
 
-# Simple command to enable specific services related to GUI (e.g., NVIDIA, StateRepository)
-function EnableSpecificServices {
-    $servicesToEnable = @("wuauserv", "DoSvc", "wlidsvc")
-    foreach ($service in $servicesToEnable) {
-        try {
-            $cmd = "sc.exe config $service start= auto"
-            $result = Start-Process -FilePath "cmd.exe" -ArgumentList "/c $cmd" -NoNewWindow -Wait -PassThru
-            if ($result.ExitCode -eq 0) {
-                Write-Host "Enabled service: $service" -ForegroundColor Green
-            } else {
-                Write-Host "Failed to enable service: $service (Exit Code: $($result.ExitCode))" -ForegroundColor Yellow
-            }
-        } catch {
-            Write-Host "Error occurred while enabling service: $service" -ForegroundColor Red
-        }
-    }
-    Write-Host "Specific services have been enabled." -ForegroundColor Cyan
-}
-
 # Check parameters and execute accordingly
 if ($StopDynamicServices) {
     Stop-DynamicServices
@@ -240,4 +221,3 @@ if ($StopDynamicServices) {
 # Example usage:
 # To disable dynamic services: powershell -ExecutionPolicy Bypass -File .\privacy.ps1 -StopDynamicServices
 # To enable dynamic services: powershell -ExecutionPolicy Bypass -File .\privacy.ps1 -StartDynamicServices
-# To enable specific services related to GUI: EnableSpecificService
