@@ -32,7 +32,6 @@ $servicesToEnable = @(
     "WPDBusEnum",
     "LicenseManager",
     "wisvc",
-    "FontCache",
     "RetailDemo",
     "SCardSvr",
     "SCPolicySvc",
@@ -61,7 +60,9 @@ $servicesToEnable = @(
     "jhi_service",
     "webthreatdefusersvc_7b51c",
     "WpnUserService_7b51c",
-    "wuauserv"
+    "wuauserv",
+    "StateRepository",    # GUI elements and UWP apps
+    "FontCache",          # Windows Font Cache Service
 )
 
 # Zainicjalizuj pasek postępu
