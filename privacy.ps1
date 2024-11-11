@@ -211,7 +211,7 @@ function Start-DynamicServices {
 
 # Simple command to enable specific services related to GUI (e.g., NVIDIA, StateRepository)
 function EnableSpecificServices {
-    $servicesToEnable = @("StateRepository", "FontCache", "wuauserv", "DoSvc", "wlidsvc")
+    $servicesToEnable = @("wuauserv", "DoSvc", "wlidsvc")
     foreach ($service in $servicesToEnable) {
         try {
             $cmd = "sc.exe config $service start= auto"
