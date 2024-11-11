@@ -18,7 +18,7 @@ $criticalServices = @(
     "UI0Detect",          # Interactive Services Detection - Detects interactive services
     "TokenBroker"         # Handles authentication processes in UWP applications
     "StateRepository",    # GUI elements and UWP apps
-    "FontCache",          # Windows Font Cache Service
+    "FontCache"           # Windows Font Cache Service
 )
 
 # Define categorized services
