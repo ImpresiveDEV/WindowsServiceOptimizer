@@ -62,7 +62,7 @@ $servicesToEnable = @(
     "WpnUserService_7b51c",
     "wuauserv",
     "StateRepository",    # GUI elements and UWP apps
-    "FontCache"         # Windows Font Cache Service
+    "FontCache"           # Windows Font Cache Service
 )
 
 # Zainicjalizuj pasek postępu
