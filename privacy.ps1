@@ -17,6 +17,8 @@ $criticalServices = @(
     "WdiSystemHost",      # Diagnostic System Host - Handles system diagnostics
     "UI0Detect",          # Interactive Services Detection - Detects interactive services
     "TokenBroker"         # Handles authentication processes in UWP applications
+    "StateRepository",    # GUI elements and UWP apps
+    "FontCache",          # Windows Font Cache Service
 )
 
 # Define categorized services
@@ -96,8 +98,6 @@ $otherServices = @(
 # Dynamic services to control with Start-DynamicServices and Stop-DynamicServices
 $dynamicServices = @(
     "wlidsvc",        # Windows Live ID Sign-in Assistant
-    "StateRepository", # GUI elements and UWP apps
-    "FontCache",      # Windows Font Cache Service
     "DoSvc",          # Delivery Optimization
     "wuauserv"        # Windows Update
 )
@@ -105,8 +105,6 @@ $dynamicServices = @(
 # Map dynamic services to their default start types
 $dynamicServicesStartType = @{
     "wlidsvc" = 3          # Manual
-    "StateRepository" = 2  # Automatic
-    "FontCache" = 2        # Automatic
     "DoSvc" = 2            # Automatic
     "wuauserv" = 3         # Manual
 }
@@ -189,7 +187,12 @@ function Start-DynamicServices {
         try {
             $startType = $dynamicServicesStartType[$service]
             $registryPath = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\$service"
-            $cmd = "reg add `"$registryPath`" /v Start /t REG_DWORD /d $startType /f"
+            if ($service -in @("TrkWks", "DoSvc", "wuauserv")) {
+                # Special handling for certain services
+                $cmd = "sc.exe config $service start= demand"
+            } else {
+                $cmd = "reg add `"$registryPath`" /v Start /t REG_DWORD /d $startType /f"
+            }
             $result = Start-Process -FilePath "cmd.exe" -ArgumentList "/c $cmd" -NoNewWindow -Wait -PassThru
             if ($result.ExitCode -eq 0) {
                 Write-Host "Enabled service: $service (Start Type: $startType)" -ForegroundColor Green
@@ -206,6 +209,25 @@ function Start-DynamicServices {
     Write-Host "Dynamic services have been enabled." -ForegroundColor Cyan
 }
 
+# Simple command to enable specific services related to GUI (e.g., NVIDIA, StateRepository)
+function EnableSpecificServices {
+    $servicesToEnable = @("StateRepository", "FontCache", "wuauserv", "DoSvc", "wlidsvc")
+    foreach ($service in $servicesToEnable) {
+        try {
+            $cmd = "sc.exe config $service start= auto"
+            $result = Start-Process -FilePath "cmd.exe" -ArgumentList "/c $cmd" -NoNewWindow -Wait -PassThru
+            if ($result.ExitCode -eq 0) {
+                Write-Host "Enabled service: $service" -ForegroundColor Green
+            } else {
+                Write-Host "Failed to enable service: $service (Exit Code: $($result.ExitCode))" -ForegroundColor Yellow
+            }
+        } catch {
+            Write-Host "Error occurred while enabling service: $service" -ForegroundColor Red
+        }
+    }
+    Write-Host "Specific services have been enabled." -ForegroundColor Cyan
+}
+
 # Check parameters and execute accordingly
 if ($StopDynamicServices) {
     Stop-DynamicServices
@@ -218,3 +240,4 @@ if ($StopDynamicServices) {
 # Example usage:
 # To disable dynamic services: powershell -ExecutionPolicy Bypass -File .\privacy.ps1 -StopDynamicServices
 # To enable dynamic services: powershell -ExecutionPolicy Bypass -File .\privacy.ps1 -StartDynamicServices
+# To enable specific services related to GUI: EnableSpecificService
