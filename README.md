@@ -1,4 +1,4 @@
-# WindowsServiceOptimizer
+# Windows Service Optimizer & Debloater
 
 ## How to run:
 
