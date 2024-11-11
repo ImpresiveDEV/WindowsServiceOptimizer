@@ -105,7 +105,7 @@ $dynamicServices = @(
 # Map dynamic services to their default start types
 $dynamicServicesStartType = @{
     "wlidsvc" = 3          # Manual
-    "DoSvc" = 2            # Automatic
+    "DoSvc" = 3            # Manual
     "wuauserv" = 3         # Manual
 }
 
