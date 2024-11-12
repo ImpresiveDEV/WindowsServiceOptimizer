@@ -61,7 +61,7 @@ $servicesToEnable = @(
     "webthreatdefusersvc_7b51c",
     "WpnUserService_7b51c",
     "wuauserv",
-    "wlidsvc"
+    "wlidsvc",
     "StateRepository",    # GUI elements and UWP apps
     "FontCache"           # Windows Font Cache Service
 )
