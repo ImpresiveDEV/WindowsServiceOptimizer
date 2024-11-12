@@ -18,6 +18,7 @@ $criticalServices = @(
     "UI0Detect",          # Interactive Services Detection - Detects interactive services
     "TokenBroker"         # Handles authentication processes in UWP applications
     "StateRepository",    # GUI elements and UWP apps
+    "wlidsvc",            # Windows Live ID Sign-in Assistant
     "FontCache"           # Windows Font Cache Service
 )
 
@@ -97,14 +98,12 @@ $otherServices = @(
 
 # Dynamic services to control with Start-DynamicServices and Stop-DynamicServices
 $dynamicServices = @(
-    "wlidsvc",        # Windows Live ID Sign-in Assistant
     "DoSvc",          # Delivery Optimization
     "wuauserv"        # Windows Update
 )
 
 # Map dynamic services to their default start types
 $dynamicServicesStartType = @{
-    "wlidsvc" = 3          # Manual
     "DoSvc" = 3            # Manual
     "wuauserv" = 3         # Manual
 }
@@ -187,7 +186,7 @@ function Start-DynamicServices {
         try {
             $startType = $dynamicServicesStartType[$service]
             $registryPath = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\$service"
-            if ($service -in @("TrkWks", "DoSvc", "wuauserv")) {
+            if ($service -in @("DoSvc", "wuauserv")) {
                 # Special handling for certain services
                 $cmd = "sc.exe config $service start= demand"
             } else {
