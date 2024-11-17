@@ -7,19 +7,23 @@ param (
 
 # List of critical services (will not be modified)
 $criticalServices = @(
-    "Winlogon",           # Windows Logon Process - Handles user login processes
-    "ProfSvc",            # User Profile Service - Manages user profiles
-    "gpsvc",              # Group Policy Client - Manages group policies
-    "VaultSvc",           # Credential Manager - Stores and manages user credentials
-    "EventLog",           # Windows Event Log - Logs system and application events
+    "Winlogon",            # Windows Logon Process - Handles user login processes
+    "ProfSvc",             # User Profile Service - Manages user profiles
+    "gpsvc",               # Group Policy Client - Manages group policies
+    "VaultSvc",            # Credential Manager - Stores and manages user credentials
+    "EventLog",            # Windows Event Log - Logs system and application events
     "CoreMessagingRegistrar", # Core Messaging - Handles inter-process communication
-    "seclogon",           # Secondary Logon - Allows processes to run with different credentials
-    "WdiSystemHost",      # Diagnostic System Host - Handles system diagnostics
-    "UI0Detect",          # Interactive Services Detection - Detects interactive services
-    "TokenBroker"         # Handles authentication processes in UWP applications
-    "StateRepository",    # GUI elements and UWP apps
-    "wlidsvc",            # Windows Live ID Sign-in Assistant
-    "FontCache"           # Windows Font Cache Service
+    "seclogon",            # Secondary Logon - Allows processes to run with different credentials
+    "WdiSystemHost",       # Diagnostic System Host - Handles system diagnostics
+    "UI0Detect",           # Interactive Services Detection - Detects interactive services
+    "TokenBroker"          # Handles authentication processes in UWP applications
+    "StateRepository",     # GUI elements and UWP apps
+    "FontCache"            # Windows Font Cache Service
+    "LicenseManager",      # License Management Service
+    "CDPSvc",              # Connected Devices Platform Service
+    "CDPUserSvc_7b51c",    # Connected Devices Platform User Service
+    "WpnUserService_7b51c", # Windows Push Notification User Service
+    "camsvc"              # Capability Access Manager Service
 )
 
 # Define categorized services
@@ -65,7 +69,6 @@ $otherServices = @(
     "PhoneSvc",                 # Phone Service
     "PcaSvc",                   # Program Compatibility Assistant Service
     "WPDBusEnum",               # Portable Device Enumerator Service
-    "LicenseManager",           # License Management Service
     "wisvc",                    # Windows Insider Service
     "RetailDemo",               # Retail Demo Service
     "SCardSvr",                 # Smart Card Service
@@ -85,25 +88,23 @@ $otherServices = @(
     "tapisrv",                  # Telephony Service
     "RmSvc",                    # Radio Management Service
     "SensorDataService",        # Sensor Data Service
-    "camsvc",                   # Capability Access Manager Service
-    "CDPSvc",                   # Connected Devices Platform Service
-    "CDPUserSvc_7b51c",         # Connected Devices Platform User Service
     "CertPropSvc",              # Certificate Propagation
     "hidserv",                  # Human Interface Device Service
     "ipfsvc",                   # IKE and AuthIP IPsec Keying Modules
     "jhi_service",              # Intel(R) Dynamic Application Loader Host Interface Service
-    "webthreatdefusersvc_7b51c",# Web Threat Defense User Service
-    "WpnUserService_7b51c"      # Windows Push Notification User Service
+    "webthreatdefusersvc_7b51c" # Web Threat Defense User Service
 )
 
 # Dynamic services to control with Start-DynamicServices and Stop-DynamicServices
 $dynamicServices = @(
+    "wlidsvc",        # Windows Live ID Sign-in Assistant
     "DoSvc",          # Delivery Optimization
     "wuauserv"        # Windows Update
 )
 
 # Map dynamic services to their default start types
 $dynamicServicesStartType = @{
+    "wlidsvc" = 3          # Manual
     "DoSvc" = 3            # Manual
     "wuauserv" = 3         # Manual
 }
@@ -186,7 +187,7 @@ function Start-DynamicServices {
         try {
             $startType = $dynamicServicesStartType[$service]
             $registryPath = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\$service"
-            if ($service -in @("DoSvc", "wuauserv")) {
+            if ($service -in @("TrkWks", "DoSvc", "wuauserv")) {
                 # Special handling for certain services
                 $cmd = "sc.exe config $service start= demand"
             } else {
